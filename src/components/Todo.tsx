@@ -1,5 +1,6 @@
 import { DialogActions, DialogTitle, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Button from "@material-ui/core/Button";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import ListComponents from "./ListComponents";
@@ -15,11 +16,18 @@ const Todo = () => {
   const [item, setItem] = useState("");
   const [newitem, setNewItem]: any = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [records, setRecords] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
     type: "",
   });
+
+  useEffect(()=>{
+    axios.get("http://localhost:4000/todo-list").then((res:any)=>{
+      setRecords(res?.data?.data);
+    })
+  },[])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,6 +48,7 @@ const Todo = () => {
         message: "Please add some items",
         type: "error",
       });
+
       return (
         <>
           <Notification notify={notify} setNotify={setNotify} />
@@ -117,8 +126,8 @@ const Todo = () => {
               }}
             >
               <ol style={{ listStyle: "none" }}>
-                {newitem.map((values: TodoList, index: number) => {
-                  return <ListComponents val={values} id={index} />;
+                {records.map((values: TodoList, index: number) => {
+                  return <ListComponents val={values} index={index} />;
                 })}
               </ol>
             </div>

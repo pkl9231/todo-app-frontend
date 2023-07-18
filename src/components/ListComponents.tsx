@@ -5,10 +5,9 @@ import UndoIcon from "@material-ui/icons/Undo";
 import { TodoList } from "./DataTypes/TodoListData";
 import "./ListComponents.css";
 
-const ListComponents: React.FC<{ val: TodoList, id : number }> = ({ val, id }, props) => {
+const ListComponents: React.FC<{ val: TodoList, index : number }> = ({ val, index }, props) => {
   const [line, setLine] = useState(false);
   const ShowLine = () => {
-  console.log("getting id", id);
     setLine(true);
   };
 
@@ -18,9 +17,9 @@ const ListComponents: React.FC<{ val: TodoList, id : number }> = ({ val, id }, p
 
   return (
     <>
-      {val ? (
+      {val?.items ? (
         <div className="todo_style">
-          <span onClick = {ShowLine} key={id}>
+          <span onClick = {ShowLine} key={val._id}>
             <DeleteIcon />
           </span>
           <li
@@ -30,7 +29,7 @@ const ListComponents: React.FC<{ val: TodoList, id : number }> = ({ val, id }, p
               paddingLeft: "10px",
             }}
           >
-            <>{val}</>
+            <>{val?.items}</>
           </li>
           <span onClick={HideLine} style={{ paddingLeft: "10px" }}>
             <UndoIcon />
