@@ -1,39 +1,31 @@
-import React, { useState } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
-import UndoIcon from "@material-ui/icons/Undo";
+import axios from "axios";
 
 import { TodoList } from "./DataTypes/TodoListData";
 import "./ListComponents.css";
 
-const ListComponents: React.FC<{ val: TodoList, index : number }> = ({ val, index }, props) => {
-  const [line, setLine] = useState(false);
+const ListComponents: React.FC<{ val: TodoList; index: number }> = (
+  { val }
+) => {
   const ShowLine = () => {
-    setLine(true);
-  };
-
-  const HideLine = () => {
-    setLine(false);
+    axios
+      .delete(`http://localhost:4000/todo-list/${val?._id}`)
+      .then((res: any) => {
+        console.log(res);
+      });
+    window.location.reload();
   };
 
   return (
     <>
       {val?.items ? (
         <div className="todo_style">
-          <span onClick = {ShowLine} key={val._id}>
+          <span onClick={ShowLine}>
             <DeleteIcon />
           </span>
-          <li
-            className="list_item"
-            style={{
-              textDecoration: line ? "line-through" : "none",
-              paddingLeft: "10px",
-            }}
-          >
+          <li className="list_item">
             <>{val?.items}</>
           </li>
-          <span onClick={HideLine} style={{ paddingLeft: "10px" }}>
-            <UndoIcon />
-          </span>
         </div>
       ) : (
         ""

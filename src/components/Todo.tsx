@@ -23,11 +23,11 @@ const Todo = () => {
     type: "",
   });
 
-  useEffect(()=>{
-    axios.get("http://localhost:4000/todo-list").then((res:any)=>{
+  useEffect(() => {
+    axios.get("http://localhost:4000/todo-list").then((res: any) => {
       setRecords(res?.data?.data);
-    })
-  },[])
+    });
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,17 +55,49 @@ const Todo = () => {
         </>
       );
     }
-    setNewItem((prevValue: any) => {
-      return [...prevValue, item];
-    });
 
+    axios
+      .post("http://localhost:4000/todo-list", { items: item })
+      .then((response) => {
+        console.log("getting response after save", response);
+        window.location.reload();
+      })
+      .catch((error: any) => {
+        console.log("getting error", error);
+        setNotify({
+          isOpen: true,
+          message: "Item already in List",
+          type: "error",
+        });
+        return (
+          <>
+            <Notification notify={notify} setNotify={setNotify} />
+          </>
+        );
+      });
     setItem(""); // clear input
   };
 
-  const clear_data = () => {
-    setNewItem(() => {
-      return [];
-    });
+  const deleteAllItem = () => {
+    axios
+      .delete("http://localhost:4000/todo-list")
+      .then((response) => {
+        console.log("getting response after delete all items", response);
+        window.location.reload();
+      })
+      .catch((error: any) => {
+        console.log("getting error", error);
+        setNotify({
+          isOpen: true,
+          message: "Getting error while deleting items",
+          type: "error",
+        });
+        return (
+          <>
+            <Notification notify={notify} setNotify={setNotify} />
+          </>
+        );
+      });
     setOpen(false);
   };
 
@@ -90,7 +122,7 @@ const Todo = () => {
 
               <Button
                 color="primary"
-                disabled={newitem.length ? false : true}
+                disabled={records.length ? false : true}
                 onClick={handleClickOpen}
               >
                 <HighlightOffRoundedIcon fontSize="large" />
@@ -110,7 +142,7 @@ const Todo = () => {
                     <Button onClick={handleClose} color="primary">
                       No
                     </Button>
-                    <Button onClick={clear_data} color="primary" autoFocus>
+                    <Button onClick={deleteAllItem} color="primary" autoFocus>
                       Yes
                     </Button>
                   </DialogActions>
