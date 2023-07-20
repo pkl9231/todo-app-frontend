@@ -8,8 +8,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Notification = (props: any) => {
-  const { notify, setNotify } = props;
+const Notification: React.FC<{notify: any , setNotify: any}> = ({notify, setNotify}) => {
   const classes = useStyles();
 
   const handleClose: any = (event: any, reason: any) => {

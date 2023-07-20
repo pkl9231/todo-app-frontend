@@ -1,29 +1,38 @@
 import DeleteIcon from "@material-ui/icons/Delete";
-import axios from "axios";
+import axios from "../axios/axios.config";
 
-import { TodoList } from "./DataTypes/TodoListData";
+import { TodoList , Notify} from "./DataTypes/TodoListData";
 import "./ListComponents.css";
 
-const ListComponents: React.FC<{ val: TodoList; index: number }> = (
-  { val }
-) => {
-  const ShowLine = () => {
-    axios
-      .delete(`http://localhost:4000/todo-list/${val?._id}`)
-      .then((res: any) => {
-        console.log(res);
+const ListComponents: React.FC<{
+  val: TodoList;
+  index: number;
+  records: TodoList[];
+  setRecords: React.Dispatch<React.SetStateAction<TodoList[]>>;
+  setNotify: React.Dispatch<React.SetStateAction<Notify>>;
+}> = ({ val, records, setRecords, setNotify }) => {
+  const deleteItems = async () => {
+    try {
+      await axios.delete(`/todo-list/${val?._id}`);
+      const todoData = records.filter((item: TodoList) => item._id !== val?._id);
+      setRecords(todoData);
+    } catch (error) {
+      setNotify({
+        isOpen: true,
+        message: "Getting error while deleting items",
+        type: "error",
       });
-    window.location.reload();
+    }
   };
 
   return (
     <>
       {val?.items ? (
-        <div className="todo_style">
-          <span onClick={ShowLine}>
+        <div className="todo-style">
+          <span onClick={deleteItems} id="deleteButton">
             <DeleteIcon />
           </span>
-          <li className="list_item">
+          <li className="list-item">
             <>{val?.items}</>
           </li>
         </div>

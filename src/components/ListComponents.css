@@ -1,5 +1,9 @@
-.todo_style {
+.todo-style {
     display: flex;
     padding: 10px;
     overflow: auto;
+}
+
+#deleteButton:hover {
+    color: red;
 }

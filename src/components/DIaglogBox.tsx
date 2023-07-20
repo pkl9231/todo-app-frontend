@@ -1,31 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { DialogActions, DialogTitle } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 
-// interface DiaglogData {
-//   open: boolean;
-// }
-const DialogBox: React.FC<{ isOpen: boolean; onClose: any }> = ({
-  isOpen,
-  onClose,
-}) => {
-  const [open, setOpen] = useState(isOpen);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const clear_data = () => {
-    // setNewItem(() => {
-    //   return [];
-    // });
-    setOpen(false);
-  };
-
+const DialogBox: React.FC<{
+  isOpen: boolean;
+  handleClose: () => void;
+  deleteAllItem: () => void;
+}> = ({ isOpen, handleClose, deleteAllItem }) => {
   return (
     <div>
       <Dialog
@@ -41,7 +23,7 @@ const DialogBox: React.FC<{ isOpen: boolean; onClose: any }> = ({
           <Button onClick={handleClose} color="primary">
             No
           </Button>
-          <Button onClick={clear_data} color="primary" autoFocus>
+          <Button onClick={deleteAllItem} color="primary" autoFocus>
             Yes
           </Button>
         </DialogActions>
