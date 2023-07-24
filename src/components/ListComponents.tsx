@@ -33,7 +33,7 @@ const ListComponents: React.FC<{
             <DeleteIcon />
           </span>
           <li className="list-item">
-            <>{val?.items}</>
+            <>{val?.items.charAt(0).toUpperCase() + val?.items.slice(1)}</>
           </li>
         </div>
       ) : (
